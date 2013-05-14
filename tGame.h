@@ -28,7 +28,7 @@ using namespace std;
 class tGame{
 public:
     int scoreTable[83][9];
-	vector<int> executeGame(tAgent* agent,FILE *f,int maxTicks);
+	vector<int> executeGame(tAgent* agent);
 	tGame();
 	~tGame();
 	double mutualInformation(vector<int> A,vector<int>B);

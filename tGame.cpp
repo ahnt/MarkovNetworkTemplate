@@ -13,70 +13,40 @@
 
 
 tGame::tGame(){
-    FILE *f=fopen("inputBasic.data","r+w");
-    int i,j;
-    for(i=0;i<83;i++){
-        for(j=0;j<9;j++){
-            int k;
-            fscanf(f,"%i    ",&k);
-            scoreTable[i][j]=k;
-            cout<<(int)scoreTable[i][j];
-        }
-        cout<<endl;
-    }
 }
 
 tGame::~tGame(){
 }
 
 
-vector<int> tGame::executeGame(tAgent* agent,FILE *f,int maxTicks){
-    int i,j,k,l,n;
-    agent->fitness=1.0;
-    agent->correct=0;
+vector<int> tGame::executeGame(tAgent* agent){
     vector<int> answers;
-    for(i=0;i<83;i++)
-        for(j=0;j<83;j++)
-            if(i!=j){
- //   for(n=0;n<1000;n++){
- //       i=rand()%83;
- //       do{j=rand()%83;} while(i==j);
-                agent->resetBrain();
-                agent->states[maxNodes-2]=0;
-                agent->states[maxNodes-1]=0;
-                for(l=0;l<maxTicks;l++){
-                    for(k=0;k<9;k++){
-                        agent->states[k]=scoreTable[i][k];
-                        agent->states[9+k]=scoreTable[j][k];
-                    }
-                    agent->updateStates();
-                }
-                int action=(agent->states[maxNodes-3]&1)+(agent->states[maxNodes-2]&1)+(agent->states[maxNodes-1]&1);
-                answers.push_back(action&1);
-                switch(action){
-                    case 0: //undecided!
-                    case 2: // answer: i>j!
-                        if(i>j){
-                            agent->fitness*=1.02;
-                            agent->correct++;
-                        } else{
-                            agent->fitness/=-1.02;
-                        }
-                        break;
-                    case 1: // answer: j>i!;
-                    case 3: // answer: j>i!;
-                         if(j>i){
-                            agent->fitness*=1.02;
-                             agent->correct++;
-                         } 
-                         else{
-                             agent->fitness/=-1.02;
-                         }
-                        break;
-                }
-            }
-    if(agent->fitness<0.0)
-        agent->fitness=0.0;
+    int trial=rand()&15;
+    int action;
+    int solution[16]={0,0,0,1,0,0,1,1,0,0,0,1,1,1,1,1};
+    agent->resetBrain();
+    agent->fitness=(double)0.0;
+    
+    agent->states[0]=(trial)&1;
+    agent->states[1]=(trial>>1)&1;
+    agent->states[2]=(trial>>2)&1;
+    agent->states[3]=(trial>>3)&1;
+    
+    agent->updateStates();
+    
+    action=agent->states[7]&1;
+    
+    switch(action){
+        case 0: // answer was 0
+            if(solution[trial]==0)
+                agent->fitness=1.0;
+            break;
+        case 1:
+            if(solution[trial]==1)
+                agent->fitness=1.0;
+            break;
+    }
+    
     return answers;
 }
 

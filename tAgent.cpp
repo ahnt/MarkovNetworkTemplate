@@ -151,8 +151,8 @@ void tAgent::setupPhenotype(void){
         
 		if((genome[i]==43)&&(genome[(i+1)%genome.size()]==(255-43))){
 			hmmu=new tHMMU;
-			hmmu->setup(genome,i);
-			//hmmu->setupQuick(genome,i);
+			//hmmu->setup(genome,i);
+			hmmu->setupQuick(genome,i);
 			hmmus.push_back(hmmu);
 		}
 	}
@@ -248,7 +248,7 @@ void tAgent::saveLOD(FILE *statsFile,FILE *genomeFile){
 	fprintf(statsFile,"%i	%i	%i	%f	%i	%f	%i	%i\n",ID,born,(int)genome.size(),fitness,bestSteps,(float)totalSteps/(float)nrOfOffspring,correct,incorrect);
 	ANN->saveLOD(genomeFile);
 #else	
-    fprintf(statsFile,"%i	%i	%f	%i	%f	%i	%i\n",ID,born,fitness,bestSteps,(float)totalSteps/(float)nrOfOffspring,correct,incorrect);
+    fprintf(statsFile,"%i,%f\n",born,fitness);
     if(!retired){
         for(int i=0;i<genome.size();i++)
             fprintf(genomeFile,"%i  ",genome[i]);

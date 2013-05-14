@@ -10,7 +10,7 @@
 #ifndef _globalConst_h_included_
 #define _globalConst_h_included_
 
-#define maxNodes 64
+#define maxNodes 8
 #define definedCue 0
 
 
